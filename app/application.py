@@ -9,9 +9,10 @@ USERS = {}
 
 GET = 'GET'
 POST = 'POST'
+DELETE = 'DELETE'
 
 
-@app.route('/user/<username>', methods=[GET])
+@app.route('/user/<username>', methods=[GET, DELETE])
 def access_users(username):
     if request.method == GET:
         user_details = USERS.get(username)
@@ -19,6 +20,11 @@ def access_users(username):
             return jsonify(user_details)
         else:
             return Response(status=404)
+    elif request.method == DELETE:
+        if username in USERS:
+            del USERS[username]
+            return Response(status=200)
+        return Response(status=404)
 
 
 @app.route('/user', methods=[POST])

@@ -21,6 +21,11 @@ def given_user_identified_by_username_and_named_name(step, username, name):
     world.new_user = {username: {'name': name}}
 
 
+@step(u'When I delete the customer \'([^\']*)\'')
+def when_i_delete_the_customer_username(step, username):
+    world.response = world.app.delete('/user/{}'.format(username))
+
+
 @step(u'I retrieve the customer \'([^\']*)\'')
 def when_i_retrieve_the_customer_username(step, username):
     world.response = world.app.get('/user/{}'.format(username))
