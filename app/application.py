@@ -13,6 +13,15 @@ DELETE = 'DELETE'
 PUT = 'PUT'
 
 
+@app.route('/user/list', methods=[GET])
+def list_users():
+    if request.method == GET:
+        user_list = {}
+        for key, value in USERS.items():
+            user_list.update({'username': key, 'name': value.get('name')})
+        return jsonify(user_list)
+
+
 @app.route('/user/<username>', methods=[GET, DELETE, PUT])
 def access_users(username):
     if request.method == GET:

@@ -20,3 +20,11 @@ Feature: Handle storing, retrieving and deleting customer details
     Given some users are in the system
     When I delete the customer 'michael01'
     Then I should get a '200' response
+
+  Scenario: List all customers
+    Given some users are in the system
+    When I list all customers
+    Then I should get a '200' response
+    And the following user details are returned:
+    | username  | name           |
+    | michael01 | Michael Pretus |
