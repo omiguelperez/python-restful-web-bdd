@@ -10,9 +10,10 @@ USERS = {}
 GET = 'GET'
 POST = 'POST'
 DELETE = 'DELETE'
+PUT = 'PUT'
 
 
-@app.route('/user/<username>', methods=[GET, DELETE])
+@app.route('/user/<username>', methods=[GET, DELETE, PUT])
 def access_users(username):
     if request.method == GET:
         user_details = USERS.get(username)
@@ -25,6 +26,14 @@ def access_users(username):
             del USERS[username]
             return Response(status=200)
         return Response(status=404)
+    elif request.method == PUT:
+        update_data = request.get_json()
+        username, new_details = update_data.items()[0]
+        if username in USERS:
+            USERS.update(update_data)
+            updated = USERS.get(username)
+            return jsonify(updated)
+        return Response(status=404)
 
 
 @app.route('/user', methods=[POST])
@@ -32,8 +41,8 @@ def register_user():
     if request.method == POST:
         user_data = request.get_json()
         USERS.update(user_data)
-        field, value = user_data.items()[0]
-        created = USERS.get(field)
+        username, details = user_data.items()[0]
+        created = USERS.get(username)
         return jsonify(created)
 
 
