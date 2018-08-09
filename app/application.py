@@ -8,6 +8,7 @@ app = Flask(__name__)
 USERS = {}
 
 GET = 'GET'
+POST = 'POST'
 
 
 @app.route('/user/<username>', methods=[GET])
@@ -18,6 +19,16 @@ def access_users(username):
             return jsonify(user_details)
         else:
             return Response(status=404)
+
+
+@app.route('/user', methods=[POST])
+def register_user():
+    if request.method == POST:
+        user_data = request.get_json()
+        USERS.update(user_data)
+        field, value = user_data.items()[0]
+        created = USERS.get(field)
+        return jsonify(created)
 
 
 if __name__ == '__main__':

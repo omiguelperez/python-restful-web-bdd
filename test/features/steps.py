@@ -16,9 +16,20 @@ def given_some_users_are_in_the_system(step):
     USERS.update({'michael01': {'name': 'Michael Pretus'}})
 
 
+@step(u'user identified by \'([^\']*)\' and named \'([^\']*)\'')
+def given_user_identified_by_username_and_named_name(step, username, name):
+    world.new_user = {username: {'name': name}}
+
+
 @step(u'I retrieve the customer \'([^\']*)\'')
 def when_i_retrieve_the_customer_username(step, username):
     world.response = world.app.get('/user/{}'.format(username))
+
+
+@step(u'I send the customer details')
+def when_i_send_the_customer_details(step):
+    world.response = world.app.post('/user', data=json.dumps(world.new_user),
+                                    content_type='application/json')
 
 
 @step(u'I should get a \'([^\']*)\' response')
