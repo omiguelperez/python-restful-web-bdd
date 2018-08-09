@@ -22,27 +22,31 @@ def list_users():
         return jsonify(user_list)
 
 
-@app.route('/user/<username>', methods=[GET, DELETE, PUT])
-def access_users(username):
-    if request.method == GET:
-        user_details = USERS.get(username)
-        if user_details:
-            return jsonify(user_details)
-        else:
-            return Response(status=404)
-    elif request.method == DELETE:
-        if username in USERS:
-            del USERS[username]
-            return Response(status=200)
+@app.route('/user/<username>', methods=[GET])
+def retrieve_user(username):
+    user_details = USERS.get(username)
+    if user_details:
+        return jsonify(user_details)
+    else:
         return Response(status=404)
-    elif request.method == PUT:
-        update_data = request.get_json()
-        username, new_details = update_data.items()[0]
-        if username in USERS:
-            USERS.update(update_data)
-            updated = USERS.get(username)
-            return jsonify(updated)
-        return Response(status=404)
+
+
+@app.route('/user/<username>', methods=[DELETE])
+def delete_user(username):
+    if username in USERS:
+        del USERS[username]
+        return Response(status=200)
+    return Response(status=404)
+
+
+@app.route('/user/<username>', methods=[PUT])
+def update_user(username):
+    update_data = request.get_json()
+    if username in USERS:
+        USERS.update({username: update_data})
+        updated = USERS.get(username)
+        return jsonify(updated)
+    return Response(status=404)
 
 
 @app.route('/user', methods=[POST])

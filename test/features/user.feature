@@ -21,6 +21,14 @@ Feature: Handle storing, retrieving and deleting customer details
     When I delete the customer 'michael01'
     Then I should get a '200' response
 
+  Scenario: Update customer details
+    Given some users are in the system
+    When I change the customer 'michael01' details
+    Then I should get a '200' response
+    And the following user details are returned:
+    | name                |
+    | Michael Seg. Pretus |
+
   Scenario: List all customers
     Given some users are in the system
     When I list all customers

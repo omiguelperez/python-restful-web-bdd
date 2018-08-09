@@ -27,6 +27,14 @@ def given_user_identified_by_username_and_named_name(step, username, name):
     world.new_user = {username: {'name': name}}
 
 
+@step(u'I change the customer \'([^\']*)\' details')
+def when_i_change_the_customer_username_details(step, username):
+    name = USERS.get(username).get('name')
+    new_name = ' '.join([name.split()[0], 'Seg.', name.split()[1]])
+    world.response = world.app.put('/user/{}'.format(username), data=json.dumps(dict(
+        name=new_name)), content_type='application/json')
+
+
 @step(u'I delete the customer \'([^\']*)\'')
 def when_i_delete_the_customer_username(step, username):
     world.response = world.app.delete('/user/{}'.format(username))
